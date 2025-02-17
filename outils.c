@@ -6,7 +6,7 @@
 /*   By: hmanes-e <hmanes-e@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 22:39:22 by hmanes-e          #+#    #+#             */
-/*   Updated: 2025/02/16 23:12:48 by hmanes-e         ###   ########.fr       */
+/*   Updated: 2025/02/17 22:53:31 by hmanes-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	free_split(char **split_array)
 {
 	int	i;
-	
+
 	if (!split_array)
 		return ;
 	i = 0;
@@ -27,11 +27,33 @@ void	free_split(char **split_array)
 	free(split_array);
 }
 
-char    *find_path(char *cmd, char **envp)
+char	*split_path(char *cmd, char **dirs)
 {
-	int     i;
-	char    *path_env;
-	char    **dirs;
+	int		i;
+	char	*full_path;
+
+	i = 0;
+	while (dirs[i])
+	{
+		full_path = malloc(ft_strlen(dirs[i]) + ft_strlen(cmd) + 2);
+		if (!full_path)
+			return (NULL);
+		ft_strcpy(full_path, dirs[i]);
+		ft_strcat(full_path, "/");
+		ft_strcat(full_path, cmd);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*find_path(char *cmd, char **envp)
+{
+	int		i;
+	char	*path_env;
+	char	**dirs;
 	char	*result;
 
 	if (ft_strchr(cmd, '/'))
@@ -48,27 +70,43 @@ char    *find_path(char *cmd, char **envp)
 	path_env = envp[i] + 5;
 	dirs = ft_split(path_env, ':');
 	if (!dirs)
-		return(NULL);
+		return (NULL);
 	result = split_path(cmd, dirs);
 	free_split(dirs);
 	return (result);
 }
-char    *split_path(char *cmd, char **dirs)
+
+void	execute_command(char *cmd, char **envp)
 {
-	int     i;
-	char    *full_path;
-	
-	i = 0;
-	while (dirs[i])
+	char	**args;
+	char	*path;
+
+	args = ft_split(cmd, ' ');
+	if (!args)
 	{
-		full_path = malloc(ft_strlen(dirs[i]) + ft_strlen(cmd) + 2);
-		if (!full_path)
-			return (NULL);
-		ft_printf(full_path, "%s/%s", dirs[i], cmd);
-		if (access(full_path, X_OK) == 0)
-			return (full_path);
-		free(full_path);
-		i++;
+		perror("Error splitting");
+		exit(EXIT_FAILURE);
 	}
-	return (NULL);
+	path = find_path(args[0], envp);
+	if (!path)
+	{
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd("\n", 2);
+		free_split(args);
+		exit(127);
+	}
+	execve(path, args, envp);
+	perror("execve failed");
+	free_split(args);
+	exit(EXIT_FAILURE);
+}
+
+void	setup_pipe(int *pfd)
+{
+	if (pipe(pfd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
 }

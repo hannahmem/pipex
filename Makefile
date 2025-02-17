@@ -5,7 +5,7 @@ LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 RM = rm -f
 
-SRC_FILES = main.c outils.c
+SRC_FILES = main.c outils.c fork.c
 OBJS = $(SRC_FILES:.c=.o)
 
 all: $(NAME)

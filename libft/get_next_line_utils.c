@@ -6,27 +6,27 @@
 /*   By: hmanes-e <hmanes-e@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 22:39:19 by hmanes-e          #+#    #+#             */
-/*   Updated: 2025/01/22 20:26:41 by hmanes-e         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:00:25 by hmanes-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
-{
-	size_t	i;
+// char	*ft_strchr(const char *s, int c)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return ((char *)(s + i));
-		++i;
-	}
-	if (s[i] == (char)c)
-		return ((char *)(s + i));
-	return (NULL);
-}
+// 	i = 0;
+// 	while (s[i])
+// 	{
+// 		if (s[i] == (char)c)
+// 			return ((char *)(s + i));
+// 		++i;
+// 	}
+// 	if (s[i] == (char)c)
+// 		return ((char *)(s + i));
+// 	return (NULL);
+// }
 
 char	*ft_strcat(char *dest, char *src)
 {
