@@ -6,7 +6,7 @@
 /*   By: hmanes-e <hmanes-e@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 22:39:22 by hmanes-e          #+#    #+#             */
-/*   Updated: 2025/02/17 22:53:31 by hmanes-e         ###   ########.fr       */
+/*   Updated: 2025/02/18 21:57:23 by hmanes-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	free_split(char **split_array)
 	free(split_array);
 }
 
-char	*split_path(char *cmd, char **dirs)
+char	*find_path(char *cmd, char **dirs)
 {
 	int		i;
 	char	*full_path;
@@ -49,7 +49,7 @@ char	*split_path(char *cmd, char **dirs)
 	return (NULL);
 }
 
-char	*find_path(char *cmd, char **envp)
+char	*split_path(char *cmd, char **envp)
 {
 	int		i;
 	char	*path_env;
@@ -71,7 +71,7 @@ char	*find_path(char *cmd, char **envp)
 	dirs = ft_split(path_env, ':');
 	if (!dirs)
 		return (NULL);
-	result = split_path(cmd, dirs);
+	result = find_path(cmd, dirs);
 	free_split(dirs);
 	return (result);
 }
@@ -84,10 +84,10 @@ void	execute_command(char *cmd, char **envp)
 	args = ft_split(cmd, ' ');
 	if (!args)
 	{
-		perror("Error splitting");
+		perror("Invalid arguments");
 		exit(EXIT_FAILURE);
 	}
-	path = find_path(args[0], envp);
+	path = split_path(args[0], envp);
 	if (!path)
 	{
 		ft_putstr_fd("Command not found: ", 2);
@@ -100,13 +100,4 @@ void	execute_command(char *cmd, char **envp)
 	perror("execve failed");
 	free_split(args);
 	exit(EXIT_FAILURE);
-}
-
-void	setup_pipe(int *pfd)
-{
-	if (pipe(pfd) == -1)
-	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
 }

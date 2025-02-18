@@ -6,7 +6,7 @@
 /*   By: hmanes-e <hmanes-e@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 13:19:53 by hmanes-e          #+#    #+#             */
-/*   Updated: 2025/02/17 22:52:52 by hmanes-e         ###   ########.fr       */
+/*   Updated: 2025/02/18 21:58:19 by hmanes-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 5)
 	{
-		ft_putstr_fd("Usage: ./pipex file1 cmd1 cmd2 file2\n", 2);
+		ft_putstr_fd("5 arguments required\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	create_pipe(pfd);
